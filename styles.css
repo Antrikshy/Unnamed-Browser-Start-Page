@@ -1,9 +1,18 @@
+#greeting {
+    margin-left: 45%;
+    margin-right: 5%;
+    margin-top: 10%;
+    font-size: 50pt;
+}
+
 #content_bar {
     position: fixed;
     z-index: 100; 
     bottom: 0; 
+    left: 0;
     width: 100%;
     height: 30%;
+    background-color: rgba(0, 0, 120, 0.5);
 }
 
 #time {

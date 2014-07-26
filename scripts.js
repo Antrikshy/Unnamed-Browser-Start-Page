@@ -63,4 +63,13 @@ $(document).ready(function() {
     }
 
     startTime();
+
+    $.cookie('userName', 'Antriksh Yadav');
+
+    var userName = $.cookie('userName');
+    
+    if (userName != undefined)
+        document.getElementById('greeting').innerHTML = "Hello, " + userName + ".";    
+    else
+        document.getElementById('greeting').innerHTML = "Hello.";            
 });
