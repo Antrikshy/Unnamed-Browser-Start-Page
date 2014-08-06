@@ -1,4 +1,37 @@
 $(document).ready(function() {
+    if ($.cookie('latitude') == undefined && $.cookie('longitude') == undefined) {
+        if (window.location.search.indexOf('latitude') <= -1 || (window.location.search.indexOf('longitude') <= -1)) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    window.location.replace(window.location.pathname + '?latitude=' + latitude + '&longitude=' + longitude);
+                    $.cookie('latitude', latitude, {expires: 7, path: '/'});
+                    $.cookie('longitude', longitude, {expires: 7, path: '/'});
+                }, function (position) {
+                    window.location.replace(window.location.pathname + '?latitude=error&longitude=error');
+                }, timeout = 7000);
+            }
+        }
+    }
+
+    var userName = $.cookie('userName');
+
+    if (userName == undefined || userName == "" || userName == " ")
+        document.getElementById('greeting').innerHTML = "Hello.";
+    else    
+        document.getElementById('greeting').innerHTML = "Hello, " + userName + "."; 
+
+    $('#save_prefs').click(function(){
+        $('#prefs_form').submit();
+    });
+
+    $('#prefs_form').submit(function(){
+        var prefsData = $('#prefs_form').serializeArray();
+        $.cookie('userName', prefsData[0]['value'], {expires: 7, path: '/'});
+        $.cookie('tempPref', prefsData[1]['value'], {expires: 7, path: '/'});
+    });
+
     function addZero(i) {
         if (i < 10) {
             i = "0" + i;
@@ -12,6 +45,7 @@ $(document).ready(function() {
         var hour = today.getHours();
         var minute = today.getMinutes();
         var second = today.getSeconds();
+        hour = addZero(hour);
         minute = addZero(minute);
         second = addZero(second);
         
@@ -55,21 +89,12 @@ $(document).ready(function() {
         var month = monthNames[today.getMonth()];
         
         document.getElementById('time').innerHTML = hour + ":" + minute + ":" + second;
+        document.getElementById('date').innerHTML = "It's " + day + ", the " + date + todayNumeral + " of " + month + ".";
+        
         t = setTimeout(function(){
             startTime()
         }, 500);
-
-        document.getElementById('date').innerHTML = "It's " + day + ", the " + date + todayNumeral + " of " + month + ".";
     }
 
     startTime();
-
-    $.cookie('userName', 'Antriksh Yadav');
-
-    var userName = $.cookie('userName');
-    
-    if (userName != undefined)
-        document.getElementById('greeting').innerHTML = "Hello, " + userName + ".";    
-    else
-        document.getElementById('greeting').innerHTML = "Hello.";            
 });
