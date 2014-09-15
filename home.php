@@ -90,7 +90,7 @@
 
     $windTips = array(
                      "It might be windy outside, but fine otherwise.",
-                     "Be advised, the strong breeze currently outside may ruin your hairdo.",
+                     "Be advised, the strong breeze outside may ruin your hairdo.",
                      "It's windy outside, currently. I recommend wearing a jacket."
                     );
 
@@ -105,6 +105,58 @@
                      'cloudy' => $cloudyTips,
                      'partly-cloudy-day' => $partlyCloudyTips,
                      'partly-cloudy-night' => $partlyCloudyTips
+                    );
+
+    $rainFutureTips = array (
+                     "It might rain later!",
+                     "Keep in mind that rain is expected later in the day.",
+                     "It will be a good idea to keep an umbrella handy because it may rain later."
+                    );
+    $snowFutureTips = array (
+                     "Remember that some snowfall is expected later in the day.",
+                     "There is snow in the forecast later today.",
+                     "Keep some snow protection handy for later today."
+                    );
+    $sleetFutureTips = array (
+                     "There is sleet in the weather forecast for today, so keep that in mind.",
+                     "It'll be nice to keep an umbrella at hand, because you may see some sleet later."
+                    );
+
+    $rainContrastTips = array (
+                     "But it may rain later in the day!",
+                     "But carry an umbrella anyway because it may rain later in the day.",
+                     "It might rain in a few hours, though!"
+                    );
+    $snowContrastTips = array (
+                     "But you can expect some snow in a few hours.",
+                     "However, there is a possibility of bad weather later in the day. Carry some snow protection!"
+                    );
+    $sleetContrastTips = array (
+                     "On the other hand, the daily forecast has sleet a few hours later.",
+                     "However, expect some sleet later today."
+                    );
+
+    $sameWeatherLaterTips = array (
+                     "The weather should stay the same more or less, throughout the day.",
+                     "The weather is not expected to change much later in the day."
+                    );
+
+    $clearFutureTips = array (
+                     "Weather should be clear later today.",
+                     "Expect clear skies in a few hours.",
+                     "Skies will be clear later in the day."
+                    );
+    $cloudyFutureTips = array (
+                     "Expect some cloud cover later.",
+                     "Skies may be cloudy later.",
+                     "Cloudy weather is expected in a few hours."
+                    );
+    $fogFutureTips = array (
+                     "There may be some fog later today."
+                    ); 
+    $windFutureTips = array (
+                     "Windy weather is expected later.",
+                     "There may be some wind later. Carry a jacket maybe?"
                     );
 
     if (isset($_COOKIE['longitude']) && isset($_COOKIE['latitude'])) {
@@ -142,9 +194,16 @@
         
         $condition = $forecast->getCurrentConditions($userLat, $userLong, $units);
         $weatherCondition = $condition->getIcon();
-        // $weatherCondition = 'rain';
+        // $weatherCondition = 'clear';
         
         $backgroundImageURL = './weather-backgrounds/' . $weatherCondition . '.jpg';
+
+        $conditionLaterToday = $forecast->getForecastToday($userLat, $userLong, $units);
+        $weatherConditionLater = $conditionLaterToday[7]->getIcon();
+
+        if (in_array($weatherConditionLater, ['rain', 'snow', 'sleet'])) {
+            
+        }
 
         if (in_array($weatherCondition, ['clear-night', 'partly-cloudy-night']))
             $isNight = True;
@@ -196,7 +255,7 @@
             </div>
         </div>
         <div id="content_bar" class="container-fluid navbar-fixed-bottom" style="<?php if ($isNight) echo 'color:white;'?>;">
-            <div id="date_temp" class="row">
+            <div id="time_temp" class="row">
                 <div id="time" class="col-md-8"></div>
                 <?php
                 if ($userLat != null && $userLong != null)
